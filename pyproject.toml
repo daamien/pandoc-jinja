@@ -1,0 +1,29 @@
+[project]
+name = "pandoc-jinja"
+version = "0.0.1"
+authors = [
+  { name="Damien Clochard", email="damien.clochard@dalibo.com" },
+]
+description = "Render pandoc metadata variables inside the document"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "panflute",
+    "jinja2"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/daamien/pandoc-cover"
+"Bug Tracker" = "https://github.com/daamien/pandoc-cover/issues"
+
+[project.scripts]
+pandoc-jinja = 'pandoc_jinja:main'
+
+[tool.setuptools]
+py-modules = ["pandoc_jinja"]
