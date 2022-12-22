@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Pandoc filter to render jinja templates on regular text.
+Pandoc filter to render metadata as jinja variables
 """
 
 import panflute as pf
@@ -18,12 +18,10 @@ def prepare(doc):
 
 
 def action(elem, doc):
-    """ Apply combined jinja variables to all strings in document.
+    """ Apply jinja variables to all strings in document.
     """
     if doc.env and isinstance(elem,pf.Str):
         elem.text = doc.env.from_string(elem.text).render()
-        return elem
-    return elem
 
 def main(doc=None):
     """ Panflute setup
