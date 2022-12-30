@@ -11,14 +11,13 @@ and use them inside the with double brackets.
 
 ```mardown
 ---
-title: 'GREETINGS !'
+title: 'Greetings !'
 bonjour: 'Hello'
-
 ...
 
-## {{title}}
+## {{ title | upper }}
 
-{{bonjour}}, {{name}} !
+{{ bonjour }}, {{name}} !
 ```
 
 You can also define variable from the command line
@@ -32,11 +31,11 @@ $ pandoc foo.md --filter=pandoc-jinja --metadata=name:world
 
 ## Disclaimer
 
-* Variables are referenced by enclosing the variable name in double brackets,
-  like `{{this}}`. **DO NOT** put spaces inside the brackets like
-  ``{{ this_wont_work }}`
+* This filter is slow. In most cases, it is probably more efficient
+  to render the entire document once and for all with jinja and then
+  pass it to pandoc.
 
-* Jinja conditionals, loops and filters are not supported.
+* Jinja conditionals and loops are not supported.
 
 ## Install
 

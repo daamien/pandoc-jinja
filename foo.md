@@ -1,9 +1,9 @@
 ---
-title: 'GREETINGS !'
+title: 'Greetings !'
 bonjour: 'Hello'
-
 ...
 
-## {{title}}
+## {{title |upper}}
 
-{{bonjour}}, {{name}} !
+{{ bonjour }}, {{name}} !
+
