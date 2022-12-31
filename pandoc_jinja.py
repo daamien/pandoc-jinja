@@ -7,29 +7,32 @@ Pandoc filter to render metadata as jinja variables
 import panflute as pf
 import jinja2
 
+## Some Elements will be deleted, but we need to keep spaces.
+PF_KEEP_CLASSES=[pf.Space]
+
+## Max number of pandoc elements for a jinja statement
+## This is just a security to avoid looping through the entire document
+SEARCH_LIMIT=100
+
 def prepare(doc):
     """ Load the doc metadata into a jinja Environment
     """
+    doc.elements_to_delete=[]
     doc.env=None
     if not doc.get_metadata('jinja',True): pass
     doc.env=jinja2.Environment()
     doc.env.globals={ k: pf.stringify(v)
                       for k,v in doc.metadata.content.items() }
 
-## Some Elements will be deleted, but we need to keep spaces.
-pf_keep_classes=(pf.Space)
-elements_to_delete=[]
-
-##
-SEARCH_LIMIT=100
 
 def action(elem, doc):
     """ Apply jinja variables to all strings in document.
     """
     if doc.env:
-        if elem in elements_to_delete and not isinstance(elem,pf_keep_classes):
+        if elem in doc.elements_to_delete:
             return []
         render(doc,elem)
+    return elem
 
 def render(doc,elem):
     """
@@ -38,14 +41,15 @@ def render(doc,elem):
     if isinstance(elem,pf.Str) and '{{' in elem.text:
         template=''
         for i in range(0,SEARCH_LIMIT):
-            # get the next elemet, stop if not found
-            n=elem.offset(i)
-            if not n : break
+            # get the next element, stop if not found
+            next_elem=elem.offset(i)
+            if not next_elem : break
             # add the element to the template
-            template += pf.stringify(n)
-            # Remove the element
-            elements_to_delete.append(n)
-            # Stop when we find the closing tag
+            template += pf.stringify(next_elem)
+            # remove the element
+            if not next_elem in PF_KEEP_CLASSES:
+                doc.elements_to_delete.append(next_elem)
+            # stop when we find the closing tag
             if '}}' in template: break
         if doc.get_metadata('panflute.debug'): pf.debug(template)
         elem.text = doc.env.from_string(template).render()
