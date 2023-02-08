@@ -7,8 +7,12 @@ Pandoc filter to render metadata as jinja variables
 import panflute as pf
 import jinja2
 
-## Some Elements will be deleted, but we need to keep spaces.
-PF_KEEP_CLASSES=[pf.Space]
+# Which classes are rendered by jinja
+PF_RENDER_CLASSES=(pf.Str, pf.CodeBlock)
+
+## Some Elements will be deleted, but we need to keep spaces
+## Because if a pf.Space object is deleted, all the following will be deleted too
+PF_KEEP_CLASSES=(pf.Space)
 
 ## Max number of pandoc elements for a jinja statement
 ## This is just a security to avoid looping through the entire document
@@ -38,7 +42,7 @@ def render(doc,elem):
     """
     Replace an element by the Jinja result
     """
-    if isinstance(elem,pf.Str) and '{{' in elem.text:
+    if isinstance(elem,PF_RENDER_CLASSES) and '{{' in elem.text:
         template=''
         for i in range(0,SEARCH_LIMIT):
             # get the next element, stop if not found
@@ -47,7 +51,7 @@ def render(doc,elem):
             # add the element to the template
             template += pf.stringify(next_elem)
             # remove the element
-            if not next_elem in PF_KEEP_CLASSES:
+            if not isinstance(next_elem,PF_KEEP_CLASSES):
                 doc.elements_to_delete.append(next_elem)
             # stop when we find the closing tag
             if '}}' in template: break

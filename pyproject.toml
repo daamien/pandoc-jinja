@@ -1,6 +1,6 @@
 [project]
 name = "pandoc-jinja"
-version = "0.1.2"
+version = "0.1.3"
 authors = [
   { name="Damien Clochard", email="damien.clochard@dalibo.com" },
 ]
