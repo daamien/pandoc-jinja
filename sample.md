@@ -2,6 +2,7 @@
 title: 'Weather Report'
 place: "Paris"
 wind: 33
+thanks: 'true'
 ...
 
 ## {{title}}
@@ -17,3 +18,9 @@ wind: 33
 ```bash
 echo 'hello {{place}} !'
 ```
+
+## Basic conditionals
+
+{{ 'Thank you' if thanks|bool else 'Goodbye !' }}
+
+

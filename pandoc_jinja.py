@@ -25,6 +25,7 @@ def prepare(doc):
     doc.env=None
     if not doc.get_metadata('jinja',True): pass
     doc.env=jinja2.Environment()
+    doc.env.filters['bool'] = bool
     doc.env.globals={ k: pf.stringify(v)
                       for k,v in doc.metadata.content.items() }
 
