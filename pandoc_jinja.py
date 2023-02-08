@@ -12,7 +12,7 @@ PF_RENDER_CLASSES=(pf.Str, pf.CodeBlock)
 
 ## Some Elements will be deleted, but we need to keep spaces
 ## Because if a pf.Space object is deleted, all the following will be deleted too
-PF_KEEP_CLASSES=(pf.Space)
+PF_KEEP_CLASSES=(pf.Space,)
 
 ## Max number of pandoc elements for a jinja statement
 ## This is just a security to avoid looping through the entire document
