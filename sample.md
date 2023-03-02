@@ -19,6 +19,16 @@ thanks: 'true'
 echo 'hello {{place}} !'
 ```
 
+## It can be disabled on certain codeblocks
+
+``` { .yaml pandoc-jinja-disable=true }
+---
+- name: "Ansible Playbook"
+   hosts: "{{ inventory_hosts }}"
+   gather_facts: yes
+...
+```
+
 ## Basic conditionals
 
 {{ 'Thank you' if thanks|bool else 'Goodbye !' }}

@@ -43,6 +43,15 @@ def render(doc,elem):
     """
     Replace an element by the Jinja result
     """
+    if isinstance(elem,pf.CodeBlock):
+        disable=pf.get_option(  options=elem.attributes,
+                                local_tag="pandoc-jinja-disable",
+                                doc=doc,
+                                doc_tag="pandoc-jinja.disable",
+                                default='')
+        if disable.lower() in ( 'true', 'on', '1', 'yes'):
+            return
+
     if isinstance(elem,PF_RENDER_CLASSES) and '{{' in elem.text:
         template=''
         for i in range(0,SEARCH_LIMIT):
