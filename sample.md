@@ -1,13 +1,15 @@
 ---
 title: 'Weather Report'
-place: "Paris"
+place:
+  city: "Paris"
+  country: "France"
 wind: 33
 thanks: 'true'
 ...
 
 ## {{title}}
 
-* The temperature in {{ place.upper() }}
+* The temperature in {{ place.city | upper }}
   was {{temperature|default('0')}} degrees.
 * The humidity was {{humidity|float * 100 }} %
 * The wind speed was {{wind |default(0)}} km/h
@@ -16,7 +18,7 @@ thanks: 'true'
 
 
 ```bash
-echo 'hello {{place}} !'
+echo 'hello {{ place.country }} !'
 ```
 
 ## It can be disabled on certain codeblocks

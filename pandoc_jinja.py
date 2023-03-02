@@ -26,9 +26,7 @@ def prepare(doc):
     if not doc.get_metadata('jinja',True): pass
     doc.env=jinja2.Environment()
     doc.env.filters['bool'] = bool
-    doc.env.globals={ k: pf.stringify(v)
-                      for k,v in doc.metadata.content.items() }
-
+    doc.env.globals=doc.get_metadata()
 
 def action(elem, doc):
     """ Apply jinja variables to all strings in document.
@@ -60,11 +58,12 @@ def render(doc,elem):
             if not next_elem : break
             # add the element to the template
             template += pf.stringify(next_elem)
-            # remove the element
+            # remove the element, except the classes we must keep
             if not isinstance(next_elem,PF_KEEP_CLASSES):
                 doc.elements_to_delete.append(next_elem)
             # stop when we find the closing tag
             if '}}' in template: break
+
         if doc.get_metadata('panflute.debug'): pf.debug(template)
         elem.text = doc.env.from_string(template).render()
 
