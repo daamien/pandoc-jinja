@@ -33,6 +33,6 @@ echo 'hello {{ place.country }} !'
 
 ## Basic conditionals
 
-{{ 'Thank you' if thanks|bool else 'Goodbye !' }}
+{{ 'Thank you' if thanks|bool }} Paris
 
 

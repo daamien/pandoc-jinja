@@ -10,10 +10,6 @@ import jinja2
 # Which classes are rendered by jinja
 PF_RENDER_CLASSES=(pf.Str, pf.CodeBlock)
 
-## Some Elements will be deleted, but we need to keep spaces
-## Because if a pf.Space object is deleted, all the following will be deleted too
-PF_KEEP_CLASSES=(pf.Space,)
-
 ## Max number of pandoc elements for a jinja statement
 ## This is just a security to avoid looping through the entire document
 SEARCH_LIMIT=100
@@ -21,6 +17,7 @@ SEARCH_LIMIT=100
 def prepare(doc):
     """ Load the doc metadata into a jinja Environment
     """
+    doc.element_id=0
     doc.elements_to_delete=[]
     doc.env=None
     if not doc.get_metadata('jinja',True): pass
@@ -32,7 +29,8 @@ def action(elem, doc):
     """ Apply jinja variables to all strings in document.
     """
     if doc.env:
-        if elem in doc.elements_to_delete:
+        doc.element_id+=1
+        if doc.element_id in doc.elements_to_delete:
             return []
         render(doc,elem)
     return elem
@@ -52,17 +50,23 @@ def render(doc,elem):
 
     if isinstance(elem,PF_RENDER_CLASSES) and '{{' in elem.text:
         template=''
+        nested_elements=0
         for i in range(0,SEARCH_LIMIT):
             # get the next element, stop if not found
             next_elem=elem.offset(i)
             if not next_elem : break
             # add the element to the template
             template += pf.stringify(next_elem)
-            # remove the element, except the classes we must keep
-            if not isinstance(next_elem,PF_KEEP_CLASSES):
-                doc.elements_to_delete.append(next_elem)
+            # remove the next elements of the jinja expression
+            # the rendered expression will replace the 1rst element
+            doc.elements_to_delete.append(doc.element_id+i)
+            if isinstance(next_elem,pf.Quoted):
+                nested_elements+=len(next_elem.content)+1
             # stop when we find the closing tag
             if '}}' in template: break
+
+        for j in range(0,nested_elements):
+            doc.elements_to_delete.append(doc.element_id+i+j)
 
         if doc.get_metadata('panflute.debug'): pf.debug(template)
         elem.text = doc.env.from_string(template).render()
