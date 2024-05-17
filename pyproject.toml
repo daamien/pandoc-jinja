@@ -1,6 +1,6 @@
 [project]
 name = "pandoc-jinja"
-version = "0.2.2"
+version = "0.2.4"
 authors = [
   { name="Damien Clochard", email="damien.clochard@dalibo.com" },
 ]
@@ -19,8 +19,8 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/daamien/pandoc-cover"
-"Bug Tracker" = "https://github.com/daamien/pandoc-cover/issues"
+"Homepage" = "https://github.com/daamien/pandoc-jinja"
+"Bug Tracker" = "https://github.com/daamien/pandoc-jinja/issues"
 
 [project.scripts]
 pandoc-jinja = 'pandoc_jinja:main'
